@@ -1,2 +1,2 @@
 # PickUp
-Uber like distributed system for ride sharing
+Uber like system for ride sharing
