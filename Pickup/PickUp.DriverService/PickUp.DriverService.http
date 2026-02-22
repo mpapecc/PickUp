@@ -1,0 +1,6 @@
+@PickUp.DriverService_HostAddress = http://localhost:5156
+
+GET {{PickUp.DriverService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

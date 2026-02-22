@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="PickUp.Common/PickUp.Common.csproj" />
+  <Project Path="PickUp.DriverService/PickUp.DriverService.csproj" />
+  <Project Path="PickUp.RiderService/PickUp.RiderService.csproj" />
+  <Project Path="PickUp.TripService/PickUp.TripService.csproj" />
+</Solution>

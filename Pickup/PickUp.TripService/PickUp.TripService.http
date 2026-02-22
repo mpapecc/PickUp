@@ -1,0 +1,6 @@
+@PickUp.TripService_HostAddress = http://localhost:5096
+
+GET {{PickUp.TripService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

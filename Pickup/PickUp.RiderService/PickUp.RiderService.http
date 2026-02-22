@@ -1,0 +1,6 @@
+@PickUp.RiderService_HostAddress = http://localhost:5202
+
+GET {{PickUp.RiderService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

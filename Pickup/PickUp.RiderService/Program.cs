@@ -1,0 +1,62 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using PickUp.Common.Application;
+using PickUp.Common.Infrastructure.Database;
+using PickUp.Common.Infrastructure.Persistance;
+using PickUp.RiderService.Application;
+using PickUp.RiderService.Infrastructure;
+using PickUp.RiderService.Infrastructure.Persistance;
+using Scalar.AspNetCore;
+using Serilog;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
+
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<BaseDbContext, RiderServiceDbContext>();
+
+builder.Services.AddDbContext<RiderServiceDbContext>(o => {
+    o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
+    {
+        o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "riderservice");
+    });
+});
+
+builder.Services.AddDistributedPostgresCache(options => {
+    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.SchemaName = builder.Configuration.GetValue<string>("PostgresCache:SchemaName");
+    options.TableName = builder.Configuration.GetValue<string>("PostgresCache:TableName");
+    options.CreateIfNotExists = builder.Configuration.GetValue<bool>("PostgresCache:CreateIfNotExists");
+});
+
+builder.Services.AddHttpClient<ITripService, TripService>(
+    client =>
+    {
+        // Set the base address of the typed client.
+        client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("TripService"));
+        // Add a user-agent default request header.
+        //client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-docs");
+    });
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
