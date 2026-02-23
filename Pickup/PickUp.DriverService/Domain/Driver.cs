@@ -1,4 +1,5 @@
-﻿using PickUp.Common.Domain.BaseModels;
+﻿using NetTopologySuite.Geometries;
+using PickUp.Common.Domain.BaseModels;
 
 namespace PickUp.DriverService.Domain
 {
@@ -8,6 +9,7 @@ namespace PickUp.DriverService.Domain
         public string Email { get; set; }
         public DriverStatus Status { get; set; }
         public Guid CurrentTripId { get; set; }
+        public Point? Location { get; set; }
         public int Version { get; set; }
     }
 

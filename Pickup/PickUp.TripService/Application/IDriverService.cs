@@ -5,7 +5,7 @@ namespace PickUp.TripService.Application
 {
     public interface IDriverService
     {
-        Task<IEnumerable<Guid>> GetAvailableDrivers();
+        Task<IEnumerable<Guid>> GetAvailableDrivers(GetAvailableDriversRequest getAvailableDriversRequest);
         Task<IBaseResponse> AssignDriver(AssignDriverRequest assignDriverRequest);
     }
 }

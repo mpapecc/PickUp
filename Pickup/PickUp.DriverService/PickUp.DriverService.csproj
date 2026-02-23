@@ -12,6 +12,7 @@
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <PackageReference Include="Microsoft.Extensions.Caching.Postgres" />
 	<PackageReference Include="Scalar.AspNetCore" />
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" />
   </ItemGroup>
 
   <ItemGroup>

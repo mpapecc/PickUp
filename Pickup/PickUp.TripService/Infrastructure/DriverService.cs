@@ -22,11 +22,13 @@ namespace PickUp.TripService.Infrastructure
             return response;
         }
 
-        public async Task<IEnumerable<Guid>> GetAvailableDrivers()
+        public async Task<IEnumerable<Guid>> GetAvailableDrivers(GetAvailableDriversRequest getAvailableDriversRequest)
         {
-            var result =  await httpClient.GetFromJsonAsync<ICollection<Guid>>("Driver/GetAvailableDrivers");
+            var result = await httpClient.PostAsJsonAsync("Driver/GetAvailableDrivers", getAvailableDriversRequest);
 
-            return result ?? Enumerable.Empty<Guid>();
+            var response = await result.Content.ReadFromJsonAsync<IEnumerable<Guid>>();
+
+            return response ?? Enumerable.Empty<Guid>();
         }
     }
 }

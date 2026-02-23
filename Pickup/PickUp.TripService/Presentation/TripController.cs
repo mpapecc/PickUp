@@ -26,7 +26,12 @@ namespace PickUp.TripService.Controllers
         {
             var availableDrivers = await RetrierService.RetryOnExceptionAsync(async () =>
             {
-                var result = await driverService.GetAvailableDrivers();
+                var result = await driverService.GetAvailableDrivers( new GetAvailableDriversRequest()
+                {
+                    Longitude = 43.51299566020603,
+                    Latitude = 16.46257497770571
+                });
+
                 return result;
             });
 

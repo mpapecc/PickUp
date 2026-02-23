@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using PickUp.DriverService.Infrastructure.Persistance;
 namespace PickUp.DriverService.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(DriverServiceDbContext))]
-    partial class DriverServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260223104242_AddGeoLocationToDriver")]
+    partial class AddGeoLocationToDriver
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

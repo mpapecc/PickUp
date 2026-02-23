@@ -21,6 +21,7 @@ builder.Services.AddDbContext<DriverServiceDbContext>(o => {
     o.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), o =>
     {
         o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "driverservice");
+        o.UseNetTopologySuite();
     });
 });
 

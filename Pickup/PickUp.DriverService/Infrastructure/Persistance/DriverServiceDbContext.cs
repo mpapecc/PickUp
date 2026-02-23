@@ -13,5 +13,15 @@ namespace PickUp.DriverService.Infrastructure.Persistance
         public override string Schema { get; set; } = "driverservice";
 
         DbSet<Driver> Drivers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<Driver>()
+            .Property(p => p.Location)
+            .HasColumnType("geography (point)");
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

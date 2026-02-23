@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using PickUp.Common.Application;
 using PickUp.Common.Domain;
 using PickUp.Common.Domain.BaseModels;
@@ -12,7 +14,7 @@ namespace PickUp.DriverService.Presentation
     public class DriverController : ControllerBase
     {
         private readonly IBaseRepository<Driver> driverRepository;
-
+        private readonly int driverSearchRadiusInMeters = 5000; //5km
         public DriverController(IBaseRepository<Driver> driverRepository)
         {
             this.driverRepository = driverRepository;
@@ -69,11 +71,15 @@ namespace PickUp.DriverService.Presentation
             return BaseResponse.CreateSuccess($"Driver {assignDriverRequest.DriverId} assigned to trip {assignDriverRequest.TripId}.");
         }
 
-        [HttpGet(nameof(GetAvailableDrivers))]
-        public async Task<IEnumerable<Guid>> GetAvailableDrivers()
+        [HttpPost(nameof(GetAvailableDrivers))]
+        public async Task<IEnumerable<Guid>> GetAvailableDrivers(GetAvailableDriversRequest getAvailableDriversRequest)
         {
+            var pickupPoint = GeometryFactoryService.CreatePoint(
+                getAvailableDriversRequest.Longitude, getAvailableDriversRequest.Latitude);
+
             return await driverRepository.Query()
                 .Where(x => x.Status == DriverStatus.Available)
+                .Where(x => x.Location != null && x.Location.IsWithinDistance(pickupPoint, driverSearchRadiusInMeters))
                 .Take(5) //dont fetch all drivers
                 .Select(x => x.Id)
                 .ToListAsync();
