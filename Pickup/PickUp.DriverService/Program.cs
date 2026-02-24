@@ -39,6 +39,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<DriverServiceDbContext>();
+        await db.Database.ExecuteSqlRawAsync("CREATE EXTENSION IF NOT EXISTS postgis;");
+        await db.Database.MigrateAsync();
+    }
 }
 
 app.UseHttpsRedirection();

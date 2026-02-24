@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "pickup.tripservice": "StartDebugging",
+        "pickup.riderservice": "StartDebugging",
+        "pickup.driverservice": "StartDebugging"
+      }
+    }
+  }
+}

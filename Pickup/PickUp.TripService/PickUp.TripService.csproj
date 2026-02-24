@@ -4,10 +4,14 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c3f00079-48aa-46a9-81ad-fc7ec550db00</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
 	<PackageReference Include="Scalar.AspNetCore" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />

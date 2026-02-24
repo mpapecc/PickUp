@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Hosting;
 using PickUp.Common.Application;
 using PickUp.Common.Infrastructure.Database;
 using PickUp.Common.Infrastructure.Persistance;
@@ -51,6 +52,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<RiderServiceDbContext>();
+        await db.Database.ExecuteSqlRawAsync("CREATE EXTENSION IF NOT EXISTS postgis;");
+        await db.Database.MigrateAsync();
+    }
 }
 
 app.UseHttpsRedirection();

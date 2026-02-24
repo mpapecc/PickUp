@@ -2,6 +2,9 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="PickUp.Common/PickUp.Common.csproj" />
   <Project Path="PickUp.DriverService/PickUp.DriverService.csproj" />
   <Project Path="PickUp.RiderService/PickUp.RiderService.csproj" />

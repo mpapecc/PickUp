@@ -1,0 +1,72 @@
+x-common-variables: &common-variables
+  ASPNETCORE_Kestrel__Certificates__Default__Password: Welcome$2u
+  ASPNETCORE_Kestrel__Certificates__Default__Path: certificate.pfx
+  ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=PickUpService;Username=postgres;Password=postgres"
+  ASPNETCORE_URLS: "http://+:80;https://+:443"
+
+x-common-service: &common-service
+  depends_on:
+    db:
+      condition: service_healthy
+  volumes:
+    - ./certificate.pfx:/app/certificate.pfx:ro
+
+services:
+  pickup.tripservice:
+    <<: *common-service
+    image: ${DOCKER_REGISTRY-}pickuptripservice
+    build:
+      context: .
+      dockerfile: PickUp.TripService/Dockerfile
+    environment:
+      <<: *common-variables
+      DriverService: https://pickup.driverservice
+    ports:
+      - "5000:80"
+      - "5001:443"
+
+  pickup.riderservice:
+    <<: *common-service
+    image: ${DOCKER_REGISTRY-}pickupriderservice
+    build:
+      context: .
+      dockerfile: PickUp.RiderService/Dockerfile
+    environment:
+      <<: *common-variables
+      TripService: https://pickup.tripservice
+    ports:
+      - "5002:80"
+      - "5003:443"
+
+  pickup.driverservice:
+    <<: *common-service
+    image: ${DOCKER_REGISTRY-}pickupdriverservice
+    build:
+      context: .
+      dockerfile: PickUp.DriverService/Dockerfile
+    environment: *common-variables
+    ports:
+      - "5004:80"
+      - "5005:443"
+
+  db:
+    image: postgis/postgis:16-3.4
+    restart: always
+    container_name: db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d PickUpService"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "5432:6666"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: PickUpService
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
